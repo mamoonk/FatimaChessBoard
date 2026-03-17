@@ -1,18 +1,28 @@
-# Fatima Chess Board
+# ♛ Fatima Chess Board
 
-A premium, web-based chess application featuring high-quality rendering, a minimax-based AI, and a modern UI.
+![Fatima Chess Banner](assets/banner.png)
 
-## Features
-- **Engine**: Full chess logic, move validation, and game result detection (checkmate, stalemate, etc.).
-- **AI**: Minimax with Alpha-Beta Pruning and Quiescence Search, running in a Web Worker for performance.
-- **Rendering**: High-DPI Canvas with smooth animations and particle effects.
-- **Themes**: Multiple visual themes including Classic, Marble, Ocean, Forest, and Cyber.
-- **Tools**: Integrated chess clocks, move history (PGN export), and board flipping.
+A premium, world-class chess platform built with native web technologies. Fatima Chess combines high-fidelity graphics, a sophisticated AI engine, and a fluid user experience.
 
-## Getting Started
-Simply open `index.html` in a modern web browser.
+## ✨ Key Features
 
-## Built With
-- HTML5 Canvas
-- Vanilla JavaScript (ES modules)
-- Custom CSS Design System
+- **🧠 Advanced AI Engine**: Powered by a Minimax algorithm with Alpha-Beta pruning and Quiescence search. The AI runs in a dedicated Web Worker to ensure zero UI lag during deep calculations.
+- **🎨 Premium Visuals**: High-DPI Canvas rendering with device-pixel-ratio scaling for razor-sharp graphics. Includes particle effects for captures and smooth cubic-bezier animations for piece movement.
+- **🌈 Dynamic Themes**: Choose from curated themes like *Marble*, *Cyber*, *Forest*, and *Ocean*, each with custom board and piece colors.
+- **⏱ Platform Integration**: Features dual chess clocks with customizable time controls and increments, full PGN export functionality, and responsive mobile support.
+- **🛠️ Robust Engine**: Implements the full suite of international chess rules, including castling, en passant, promotion, and sophisticated draw detection (Stalemate, Threefold Repetition, 50-move rule).
+
+## 🚀 Getting Started
+
+No installation required. Fatima Chess is a pure client-side application.
+
+1. Clone the repository.
+2. Open `index.html` in any modern web browser.
+
+## 🛠 Built With
+
+- **Core**: Vanilla JavaScript (ES Module architecture)
+- **UI**: Modern CSS Design System (Glassmorphism, CSS Custom Properties)
+- **Graphics**: HTML5 Canvas (HDPI)
+- **AI**: Minimax + Alpha-Beta Pruning
+
