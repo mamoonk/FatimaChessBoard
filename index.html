@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fatima Chess Board — World-Class Chess Platform</title>
+  <meta name="description" content="A premium, platform-independent chess game. Play against friends or AI bots with HD graphics, smooth animations, and advanced features." />
+  <meta name="theme-color" content="#0a0a14" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♛</text></svg>" />
+  <link rel="stylesheet" href="src/styles/index.css" />
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-spinner"></div>
+    <h2>♛ Fatima Chess</h2>
+    <p>Preparing the board...</p>
+  </div>
+
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-logo">
+        <span class="crown-icon">♛</span>
+        <h1>Fatima Chess</h1>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-icon" id="btn-theme-toggle" data-tooltip="Toggle Dark/Light">🌙</button>
+        <button class="btn btn-icon" id="btn-sound-toggle" data-tooltip="Toggle Sound">🔊</button>
+        <button class="btn btn-primary" id="btn-new-game">✦ New Game</button>
+      </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <main class="game-container">
+      <!-- Board Column -->
+      <div class="board-column">
+        <!-- Top player (opponent) -->
+        <div class="player-bar" id="player-top">
+          <div class="player-avatar" id="avatar-top">♟</div>
+          <div class="player-info">
+            <div class="player-name" id="name-top">Black</div>
+            <div class="captured-pieces" id="captured-top"></div>
+          </div>
+          <div class="clock" id="clock-top">10:00</div>
+        </div>
+
+        <!-- Chess Board -->
+        <div class="board-wrapper" id="board-wrapper">
+          <canvas id="chess-board"></canvas>
+          <!-- Promotion Picker (hidden by default) -->
+          <div class="promotion-picker hidden" id="promotion-picker"></div>
+          <!-- Game Over Banner -->
+          <div class="game-over-banner" id="game-over-banner">
+            <h2 id="game-over-title">Game Over</h2>
+            <p id="game-over-message"></p>
+          </div>
+        </div>
+
+        <!-- Bottom player (you) -->
+        <div class="player-bar active" id="player-bottom">
+          <div class="player-avatar" id="avatar-bottom">♙</div>
+          <div class="player-info">
+            <div class="player-name" id="name-bottom">White</div>
+            <div class="captured-pieces" id="captured-bottom"></div>
+          </div>
+          <div class="clock active" id="clock-bottom">10:00</div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <button class="btn" id="btn-undo" data-tooltip="Undo Move">⟵ Undo</button>
+          <button class="btn" id="btn-flip" data-tooltip="Flip Board">↕ Flip</button>
+          <button class="btn" id="btn-resign" data-tooltip="Resign Game">🏳 Resign</button>
+          <button class="btn" id="btn-draw" data-tooltip="Offer Draw">½ Draw</button>
+          <button class="btn" id="btn-export" data-tooltip="Copy PGN">📋 PGN</button>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <!-- Move History Panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>📝 Moves</h3>
+            <span id="move-count" style="font-size:0.75rem; color:var(--text-muted)">0 moves</span>
+          </div>
+          <div class="panel-body">
+            <div class="move-list" id="move-list">
+              <div style="color:var(--text-muted); font-size:0.85rem; text-align:center; padding: 20px 0;">
+                Game moves will appear here
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game Info Panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>⚙ Settings</h3>
+          </div>
+          <div class="panel-body">
+            <div class="option-group" style="margin-bottom: var(--space-md);">
+              <label>Board Theme</label>
+              <div class="option-buttons" id="theme-selector">
+                <button class="option-btn selected" data-theme="classic">Classic</button>
+                <button class="option-btn" data-theme="marble">Marble</button>
+                <button class="option-btn" data-theme="ocean">Ocean</button>
+                <button class="option-btn" data-theme="forest">Forest</button>
+                <button class="option-btn" data-theme="cyber">Cyber</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Status Bar -->
+    <footer class="status-bar">
+      <span class="turn-indicator">
+        <span class="turn-dot white" id="turn-dot"></span>
+        <span id="status-text">White to move</span>
+      </span>
+    </footer>
+  </div>
+
+  <!-- New Game Modal -->
+  <div class="modal-overlay" id="new-game-modal">
+    <div class="modal">
+      <h2>✦ New Game</h2>
+      <div class="new-game-options">
+        <div class="option-group">
+          <label>Game Mode</label>
+          <div class="option-buttons">
+            <button class="option-btn selected" data-option="mode" data-value="pvp">🧑‍🤝‍🧑 PvP</button>
+            <button class="option-btn" data-option="mode" data-value="bot">🤖 vs Bot</button>
+          </div>
+        </div>
+        <div class="option-group" id="difficulty-group" style="display:none;">
+          <label>Bot Difficulty</label>
+          <div class="option-buttons">
+            <button class="option-btn" data-option="difficulty" data-value="beginner">😊 Beginner</button>
+            <button class="option-btn selected" data-option="difficulty" data-value="advanced">🧠 Advanced</button>
+            <button class="option-btn" data-option="difficulty" data-value="expert">👑 Expert</button>
+          </div>
+        </div>
+        <div class="option-group" id="color-group" style="display:none;">
+          <label>Play As</label>
+          <div class="option-buttons">
+            <button class="option-btn selected" data-option="color" data-value="w">⬜ White</button>
+            <button class="option-btn" data-option="color" data-value="b">⬛ Black</button>
+            <button class="option-btn" data-option="color" data-value="random">🎲 Random</button>
+          </div>
+        </div>
+        <div class="option-group">
+          <label>Time Control</label>
+          <div class="option-buttons">
+            <button class="option-btn" data-option="time" data-value="1|0">⚡ 1+0</button>
+            <button class="option-btn" data-option="time" data-value="3|2">🔥 3+2</button>
+            <button class="option-btn selected" data-option="time" data-value="10|5">⏱ 10+5</button>
+            <button class="option-btn" data-option="time" data-value="30|0">🕐 30+0</button>
+            <button class="option-btn" data-option="time" data-value="0|0">♾ None</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" id="btn-modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="btn-modal-start">▶ Start Game</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="bundle.js"></script>
+</body>
+</html>
