@@ -1,5 +1,8 @@
 # Build artifacts
 bundle.js
+dist/
+out/
+build/
 
 # IDEs and Editors
 .vscode/
@@ -9,20 +12,28 @@ bundle.js
 *.njsproj
 *.sln
 *.swp
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+.classpath
 
 # Operating System
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Node.js (if applicable in the future)
+# Node.js
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .npm/
+package-lock.json
+yarn.lock
 
 # Logs
-logs
+logs/
 *.log
 
 # Local environment files
@@ -31,3 +42,8 @@ logs
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Temp
+tmp/
+temp/
+
