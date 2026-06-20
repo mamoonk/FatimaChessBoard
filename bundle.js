@@ -2004,23 +2004,40 @@ function renderBoard() {
       requestAnimationFrame(animLoop);
     }
   }, 300 + Math.random() * 400);
+}
+
+// ── Board Event Handlers ──────────────────────────────────────
+function setupBoardEvents(canvas) {
+  let isDragging = false;
+  let dragStartSquare = null;
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  function handleStart(e) {
+    e.preventDefault();
+    if (isDragging) return;
+    const pos = getPos(e);
+    const sq = app.renderer.pixelToSquare(pos.x, pos.y);
+    if (!sq) return;
     
     const [row, col] = sq;
     const piece = app.game.getState().board[row][col];
     
-    // Can only interact on your turn (in bot mode)
     if (app.mode === 'bot' && app.game.getTurn() !== app.playerColor) return;
     
     if (piece && piece.color === app.game.getTurn()) {
       isDragging = true;
       dragStartSquare = [row, col];
       app.renderer.startDrag(row, col, piece.color, piece.type, pos.x, pos.y);
-      
-      // Also select the square
       app.game.selectSquare(row, col);
       renderBoard();
     } else {
-      // Try click-to-move (if piece already selected)
       const result = app.game.selectSquare(row, col);
       handleMoveResult(result);
     }
@@ -2036,9 +2053,7 @@ function renderBoard() {
   
   function handleEnd(e) {
     e.preventDefault();
-    if (!isDragging) {
-      return;
-    }
+    if (!isDragging) return;
     
     isDragging = false;
     app.renderer.endDrag();
@@ -2057,7 +2072,6 @@ function renderBoard() {
     const [row, col] = sq;
     const [fromRow, fromCol] = dragStartSquare;
     
-    // Don't process if dropped on same square
     if (row === fromRow && col === fromCol) {
       renderBoard();
       return;
