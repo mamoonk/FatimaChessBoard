@@ -1,5 +1,4 @@
 # Build artifacts
-bundle.js
 dist/
 out/
 build/
