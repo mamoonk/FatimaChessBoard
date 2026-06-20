@@ -1957,53 +1957,17 @@ async function init() {
 
 // ── Board Rendering ────────────────────────────────────────────
 function renderBoard() {
-  app.botThinking = true;
-  updateStatus();
+  const state = app.game.getState();
 
-  // Add small delay for UX
-  setTimeout(() => {
-    const state = app.game.getState();
+  const options = {
+    selectedSquare: app.game.selectedSquare,
+    legalMoves: app.game.legalMovesForSelected || [],
+    lastMove: app.game.getLastMove(),
+    inCheck: app.game.isInCheck(),
+    gameResult: app.game.gameResult
+  };
 
-    // If a worker is available, use it to compute the move off the main thread
-    if (app.aiWorker) {
-      try {
-        app.aiWorker.postMessage({ state, difficulty: app.difficulty });
-      } catch (err) {
-        console.warn('AI worker postMessage failed, falling back to main-thread AI', err);
-        app.aiWorker = null;
-      }
-      return;
-    }
-
-    // Fallback: compute on main thread
-    const bestMove = findBestMove(state, app.difficulty);
-
-    if (bestMove && !app.game.isGameOver()) {
-      // Animate the move
-      const piece = state.board[bestMove.from[0]][bestMove.from[1]];
-      app.renderer.animateMove(
-        bestMove.from[0], bestMove.from[1],
-        bestMove.to[0], bestMove.to[1],
-        piece.color, piece.type,
-        () => {
-          app.game.selectedSquare = bestMove.from;
-          app.game.legalMovesForSelected = app.game.getLegalMoves().filter(
-            m => m.from[0] === bestMove.from[0] && m.from[1] === bestMove.from[1]
-          );
-          app.game.executeMove(bestMove);
-          app.botThinking = false;
-          onMoveMade();
-        }
-      );
-
-      // Keep re-rendering during animation
-      const animLoop = () => {
-        renderBoard();
-        if (app.renderer.animatingPiece) requestAnimationFrame(animLoop);
-      };
-      requestAnimationFrame(animLoop);
-    }
-  }, 300 + Math.random() * 400);
+  app.renderer.render(state, options);
 }
 
 // ── Board Event Handlers ──────────────────────────────────────
